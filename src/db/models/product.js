@@ -20,7 +20,7 @@ const productSchema = new mongoose.Schema(
       type: String,
     },
   },
-  { timestamps: true },
+  { timestamps: true, versionKey: false },
 );
 
 export const Product = mongoose.model('Product', productSchema);
