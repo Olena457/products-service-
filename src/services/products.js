@@ -1,6 +1,6 @@
 import { Product } from '../db/models/product.js';
 
-export async function getAllProductsService(filter = {}) {
+export async function getAllProductsService(filter = {}, userId) {
   const productsQuery = Product.find();
   if (filter.category) {
     productsQuery.where('category').equals(filter.category);
@@ -16,21 +16,21 @@ export async function getAllProductsService(filter = {}) {
   return products;
 }
 
-export async function getProductByIdService(productId) {
-  return await Product.findOne({ _id: productId });
+export async function getProductByIdService(productId, userId) {
+  return await Product.findOne({ _id: productId, userId });
 }
 
 export function createProduct(payload) {
   return Product.create(payload);
 }
 
-export function updateProduct(productId, updateData) {
-  return Product.findByIdAndUpdate(productId, updateData, {
+export function updateProduct(productId, userId, updateData) {
+  return Product.findByIdAndUpdate(productId, userId, updateData, {
     new: true,
     runValidators: true,
   });
 }
 
-export function deleteProduct(productId) {
-  return Product.findByIdAndDelete(productId);
+export function deleteProduct(productId, userId) {
+  return Product.findByIdAndDelete(productId, userId);
 }

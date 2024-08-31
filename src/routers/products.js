@@ -13,27 +13,21 @@ import {
   updateProductSchema,
 } from '../validation/prodacts.js';
 import { isValidId } from '../middlewares/isValisId.js';
+import { authenticate } from '../middlewares/authenticate.js';
 
 const router = Router();
+router.use(authenticate);
 
-router.get('/products', ctrlWrapper(getAllProductsController));
-router.get(
-  '/products/:productId',
-  isValidId,
-  ctrlWrapper(getProductByIdController),
-);
+router.get('/', ctrlWrapper(getAllProductsController));
+router.get('/:productId', isValidId, ctrlWrapper(getProductByIdController));
 router.post(
-  '/products',
+  '/',
   validateBody(createProductSchema),
   ctrlWrapper(createProductController),
 );
-router.delete(
-  'products/:productId',
-  isValidId,
-  ctrlWrapper(deleteProductController),
-);
+router.delete('/:productId', isValidId, ctrlWrapper(deleteProductController));
 router.patch(
-  '/products/:productId',
+  '/:productId',
   validateBody(updateProductSchema),
   ctrlWrapper(updateProductController),
 );

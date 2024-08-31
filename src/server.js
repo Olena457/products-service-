@@ -4,7 +4,7 @@ import cors from 'cors';
 import { env } from './utils/env.js';
 import errorHandler from './middlewares/errorHandler.js';
 import notFoundHandler from './middlewares/notFoundHandler.js';
-import productsRouter from './routers/products.js';
+import router from './routers/index.js';
 
 const PORT = Number(env('PORT', '3000'));
 
@@ -17,7 +17,7 @@ export const setupServer = () => {
   // app.use('/', (req, res) => {
   //   res.send('HELLO!!!');
   // });
-  app.use(productsRouter);
+  app.use(router);
 
   app.use('*', notFoundHandler);
 
