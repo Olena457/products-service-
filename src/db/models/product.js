@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
 const productSchema = new mongoose.Schema(
   {
@@ -19,6 +19,7 @@ const productSchema = new mongoose.Schema(
     description: {
       type: String,
     },
+    userId: { type: Schema.Types.ObjectId, required: true },
   },
   { timestamps: true, versionKey: false },
 );
