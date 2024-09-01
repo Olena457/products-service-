@@ -68,9 +68,11 @@ export const patchProductController = async (req, res, next) => {
 export const updateProductController = async (req, res) => {
   const userId = req.user._id;
   const { productId } = req.params;
-  const updateData = { ...req.body, userId };
 
-  const updatedProduct = await updateProduct(productId, updateData);
+  const updatedProduct = await updateProduct(
+    { _id: productId, userId },
+    req.body,
+  );
 
   if (updatedProduct === null) {
     throw createHttpError.NotFound('Product not found');
@@ -87,7 +89,7 @@ export const deleteProductController = async (req, res, next) => {
   const userId = req.user._id;
   const { productId } = req.params;
 
-  const deletedProduct = await deleteProduct(productId, userId);
+  const deletedProduct = await deleteProduct({ _id: productId, userId });
 
   if (deletedProduct === null) {
     return next(createHttpError.NotFound('Product not found'));
