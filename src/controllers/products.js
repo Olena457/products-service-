@@ -21,7 +21,7 @@ export const getAllProductsController = async (req, res) => {
   });
 };
 
-export const getProductByIdController = async (req, res) => {
+export const getProductByIdController = async (req, res, next) => {
   const { productId } = req.params;
   const userId = req.user._id;
 
@@ -30,7 +30,9 @@ export const getProductByIdController = async (req, res) => {
   if (!product) {
     throw createHttpError(404, 'Product not found');
   }
-
+  if (product.userId.toString() !== userId.toString()) {
+    return next(createHttpError(403, 'Access denied'));
+  }
   res.json({
     status: 200,
     message: `Successfully found product with id ${productId}!`,
@@ -39,7 +41,8 @@ export const getProductByIdController = async (req, res) => {
 };
 export const createProductController = async (req, res) => {
   const userId = req.user._id;
-  const product = await createProduct(req.body, userId);
+  const payload = { ...req.body, userId };
+  const product = await createProduct(payload, userId);
   res.status(201).json({
     status: 201,
     message: 'Successfully created a product!',
@@ -65,9 +68,9 @@ export const patchProductController = async (req, res, next) => {
 export const updateProductController = async (req, res) => {
   const userId = req.user._id;
   const { productId } = req.params;
-  const updateData = req.body;
+  const updateData = { ...req.body, userId };
 
-  const updatedProduct = await updateProduct(productId, userId, updateData);
+  const updatedProduct = await updateProduct(productId, updateData);
 
   if (updatedProduct === null) {
     throw createHttpError.NotFound('Product not found');
