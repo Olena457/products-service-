@@ -1,6 +1,7 @@
 import { REFRESH_TOKEN_EXPIRY } from '../constants/index.js';
 import {
   loginUser,
+  logoutUser,
   refreshUsersSession,
   registerUser,
 } from '../services/user.js';
@@ -42,6 +43,17 @@ const setupSession = (res, session) => {
     expires: new Date(Date.now() + REFRESH_TOKEN_EXPIRY),
   });
 };
+
+export const logoutUserController = async (req, res) => {
+  if (req.cookies.sessionId) {
+    await logoutUser(req.cookies.sessionId);
+  }
+  res.clearCookie('sessionId');
+  res.clearCookie('refreshToken');
+
+  res.status(204).send();
+};
+
 export const refreshUserController = async (req, res) => {
   const session = await refreshUsersSession({
     sessionId: req.cookies.sessionId,

@@ -2,7 +2,7 @@ import createHttpError from 'http-errors';
 import { UserCollections } from '../db/models/userSchema.js';
 import bcrypt from 'bcrypt';
 import { sessionsCollections } from '../db/models/sessions.js';
-import { randomBytes } from 'bcrypt';
+import { randomBytes } from 'crypto';
 import {
   ACCESS_TOKEN_EXPIRY,
   REFRESH_TOKEN_EXPIRY,
@@ -70,4 +70,7 @@ export const loginUser = async (payload) => {
     accessTokenValidUntil: new Date(Date.now() + ACCESS_TOKEN_EXPIRY),
     refreshTokenValidUntil: new Date(Date.now() + REFRESH_TOKEN_EXPIRY),
   });
+};
+export const logoutUser = async (sessionId) => {
+  await sessionsCollections.deleteOne({ _id: sessionId });
 };

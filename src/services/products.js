@@ -1,7 +1,7 @@
 import { Product } from '../db/models/product.js';
 
 export async function getAllProductsService(filter = {}, userId) {
-  const productsQuery = Product.find();
+  const productsQuery = Product.find({ userId });
   if (filter.category) {
     productsQuery.where('category').equals(filter.category);
   }
@@ -24,13 +24,10 @@ export function createProduct(payload) {
   return Product.create(payload);
 }
 
-export function updateProduct(productId, userId, updateData) {
-  return Product.findByIdAndUpdate(productId, userId, updateData, {
-    new: true,
-    runValidators: true,
-  });
+export function updateProduct(productId, userId) {
+  return Product.findByIdAndUpdate({ _id: productId, userId });
 }
 
 export function deleteProduct(productId, userId) {
-  return Product.findByIdAndDelete(productId, userId);
+  return Product.findByIdAndDelete({ _id: productId, userId });
 }
