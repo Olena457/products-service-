@@ -1,0 +1,75 @@
+tags:
+  - Products
+summary: Get list of products
+operationId: getProducts
+description: 'Get list of products with this endpoint'
+security:
+  - bearerAuth: []
+parameters:
+  - in: query
+    name: category
+    schema:
+      type: integer
+    example: 'books'
+  - in: query
+    name: minPrice
+    schema:
+      type: number
+      example: 1
+    description: 'minPrice'
+  - in: query
+    name: maxPrice
+    schema:
+      type: number
+      example: 10
+    description: 'maxPrice'
+responses:
+  '200':
+    description: Successfully found products!
+    content:
+      application/json:
+        schema:
+          type: object
+          required:
+            - status
+            - message
+            - data
+          properties:
+            status:
+              type: integer
+              example: 200
+            message:
+              type: string
+              example: Successfully found products!
+            data:
+              type: object
+              required:
+                - data
+                - category
+                - minPrice
+                - maxPrice
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../../components/products/schemas/product.yaml'
+                page:
+                  type: number
+                  example: 2
+                perPage:
+                  type: number
+                  example: 4
+                totalItems:
+                  type: number
+                  example: 4
+                totalPages:
+                  type: number
+                  example: 4
+                hasNextPage:
+                  type: boolean
+                  example: false
+                hasPreviousPage:
+                  type: boolean
+                  example: true
+  '401':
+    $ref: ../../components/products/responses/401.yaml
