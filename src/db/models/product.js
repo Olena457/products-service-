@@ -19,7 +19,7 @@ const productSchema = new mongoose.Schema(
     description: {
       type: String,
     },
-    userId: { type: Schema.Types.ObjectId, required: true },
+    userId: { type: Schema.Types.ObjectId, required: true, ref: 'users' },
   },
   { timestamps: true, versionKey: false },
 );
